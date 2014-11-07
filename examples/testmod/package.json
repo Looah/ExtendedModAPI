@@ -1,0 +1,9 @@
+{
+	"id" : "emapi_ex_1",
+	"name" : "Extended (Game Dev Tycoon) Mod API",
+	"version":"0.0.1",
+	"author":"Looah",
+	"url":"http://looah.github.io/",
+	"description" : "A community-made API for Game Dev Tycoon to extend the possibilities of what another modder can do.",
+	"main" : "./code/main.js"
+}

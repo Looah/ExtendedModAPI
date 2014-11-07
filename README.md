@@ -1,0 +1,1 @@
+## Extended (Game Dev Tycoon) Mod API

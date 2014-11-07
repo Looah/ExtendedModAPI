@@ -1,0 +1,8 @@
+Quickdoc for EMAPI-Achievements
+Documentation is shown with C-Syntax.
+
+object MenuItem is {string label, function onclick}
+
+void GDT.addMenuItem(MenuItem menuitem) - adds a menuitem to the queue
+void GDT.updateMenuItems() - adds queued menuitems to the context menu
+void GDT.removeCustomMenuItems() - removes all custom menu items made by EMAPI from the context menu

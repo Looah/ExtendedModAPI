@@ -1,0 +1,12 @@
+Quickdoc for EMAPI-Sound
+Documentation is shown with C-Syntax.
+
+object Sound is an array representing {string id, string path, string type}
+NOTES:
+- always say that 'type' is 'sound'
+- 'path' must be an mp3
+
+void GDT.resetMusic() - remove all bgm
+void GDT.resetMusicByStage(short stage) - removes all bgm from stages 1 to 4
+void GDT.addMusic(Sound music) - adds bgm or fx to game
+

@@ -1,0 +1,8 @@
+Quickdoc for EMAPI-Achievements
+Documentation is shown with C-Syntax.
+
+object Achievement is equal to an array with {string id = "noname_#", string title, string description, boolfunction isAchieved = false, hexcolor tint = "#F4B300", int value} 
+
+void GDT.addAchievement(Achievement achievement) - Adds achievement to achievements
+Achievement[] GDT.getAchievements() - returns all achievements
+void GDT.resetAchievements() - please don't use, not sure what it exactly does yet ._.'
