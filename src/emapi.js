@@ -47,12 +47,12 @@ var UniqueValue = 0; //used for making non-conflicting id's
 		GDT.addAchievement = function (achievement) {
 			_yieldUntil(Achievements);
 			Achievements[achievement.id || "noname_" + UniqueValue++]={
-			id: checkExist(achievement.id) || "noname_" + (UniqueValue-1),
+			id: _doesExist(achievement.id) || "noname_" + (UniqueValue-1),
 			title: achievement.title || typeof achievement.title,
 			description: achievement.description || typeof achievement.description,
-			isAchieved: checkExist(achievement.isAchieved) || (function(){return false;}),
-			tint: checkExist(achievement.tint) || "#F4B300",
-			value: checkExist(achievement.value) || 150
+			isAchieved: _doesExist(achievement.isAchieved) || (function(){return false;}),
+			tint: _doesExist(achievement.tint) || "#F4B300",
+			value: _doesExist(achievement.value) || 150
 			};
 		}
 		GDT.getAchievements = function() {
@@ -100,17 +100,22 @@ var UniqueValue = 0; //used for making non-conflicting id's
 			Sound._backgroundMusic.push(music.id);
 		}
 	//UI
-	var CollectedMenuItems = {};
-		GDT.addMenuItem = function (menuitem) {
-			CollectedMenuItems.push(menuitem); //lel
-		};
-		GDT.updateMenuItems = function (characterContextMenu) {
+	var CollectedMenuItems = [];
+		GDT.addMenuItem = function (menuitem, overCharacter) {
 			_yieldUntil(UI);
 			var oldContextMenu = UI.showContextMenu;
 			var newContextMenu = function(menuitems, mousepos) {
-				if (GameManager.isIdle() && !UI.getCharUnderCursor())
+				if (overCharacter)
 				{
-					CollectedMenuItems.forEach(menuitems.push());
+					if (GameManager.isIdle() && UI.getCharUnderCursor())
+					{
+						menuitems.push(menuitem);
+					} 
+				} else {
+					if (GameManager.isIdle() && !UI.getCharUnderCursor())
+					{
+						menuitems.push(menuitem);
+					} 
 				}
 				oldContextMenu(menuitems, mousepos);
 			}
@@ -122,7 +127,9 @@ var UniqueValue = 0; //used for making non-conflicting id's
 	//Lab researches
 		GDT.addLabResearch = function (research)
 		{
-			yieldUntil(Research);
-			Research.push(research);
+			_yieldUntil(Research);
+			Research[research.id]=research;
+			Research.bigProjects.push(Research[research.id]);
+			//TODO: manage to make them actually appear c:
 		}
 })();
