@@ -3,8 +3,10 @@ Documentation is shown with C-Syntax.
 
 object Sound is an array representing {string id, string path, string type}
 NOTES:
-- always say that 'type' is 'sound'
-- 'path' must be an mp3
+- Sound.path must always be a path to an ogg file.
+--old notes--
+- always say that 'type' is 'sound' (now default)
+- 'path' must be an mp3 (must be ogg)
 
 void GDT.resetMusic() - remove all bgm
 void GDT.resetMusicByStage(short stage) - removes all bgm from stages 1 to 4

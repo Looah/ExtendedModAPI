@@ -3,6 +3,13 @@ Documentation is shown with C-Syntax.
 
 object MenuItem is {string label, function onclick}
 
+void GDT.addMenuItem(MenuItem menuitem, bool overCharacter) - adds menu item to the context menu
+	:MenuItem menuitem - the menu item to add
+	:bool overCharacter - if true, show when clicking over a staff member, if false, only show when not clicking on a staff member
+
+
+
+-- old --
 void GDT.addMenuItem(MenuItem menuitem) - adds a menuitem to the queue
 void GDT.updateMenuItems() - adds queued menuitems to the context menu
 void GDT.removeCustomMenuItems() - removes all custom menu items made by EMAPI from the context menu

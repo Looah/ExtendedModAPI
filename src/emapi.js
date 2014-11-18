@@ -3,7 +3,7 @@
 	Written by Looah
 	By using this file you accept the Greenheart Games Modding Agreement.
 	Licensed under the ISC license.
-	-- the legal disclaimer stuff that nobody understands except l33t hax0rs --
+	-- the legal disclaimer stuff that nobody understands except lawyers --
 	Copyright (c) Looah <looah@cock.li>
 
 	Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
@@ -15,18 +15,29 @@
 	--
 	Yes, this does mean that you're allowed to distribute this modifications its files with your mod.
 */
+
+/* 
+TODO list
+- add argument-type checks to avoid errors that could break other mods too
+- make default objects to avoid weird researches/achievements/music etc.
+- fix lab researches
+- finish texture swapping
+
+/*/
+
 // If EMAPI is already running, halt code
 if (typeof EMAPI_RUNNING != "undefined")
 {
+	console.log("EMAPI already running :/");
 	while (true)
 	{
 		//ugly halt
 	}
 }
+console.log("Preparing EMAPI");
+var EMAPI_RUNNING = true; //tell EMAPI is running
 
-//flags
-var EMAPI_RUNNING = true;
-//simple check if undefined or not
+//if existant, return it, else return false
 function _doesExist(x)
 {
 	if (typeof x != "undefined")
@@ -36,11 +47,13 @@ function _doesExist(x)
 		return false;
 	}
 }
+//yield until x exists
 function _yieldUntil(x)
 {
 	while (typeof x == "undefined") {} //yield
 	return x;
 }
+
 (function(){
 var UniqueValue = 0; //used for making non-conflicting id's
 	//Achievements
@@ -92,7 +105,8 @@ var UniqueValue = 0; //used for making non-conflicting id's
 			}
 		}
 		GDT.addMusic = function (music) {
-			_yieldUntil(Sound);
+			_yieldUntil(Sound)
+			music.type = "sound";
 			createjs.Sound.registerPlugins([createjs.HTMLAudioPlugin]);
 			var musicloader = new createjs.LoadQueue;
 			musicloader.installPlugin(createjs.Sound);
@@ -100,7 +114,6 @@ var UniqueValue = 0; //used for making non-conflicting id's
 			Sound._backgroundMusic.push(music.id);
 		}
 	//UI
-	var CollectedMenuItems = [];
 		GDT.addMenuItem = function (menuitem, overCharacter) {
 			_yieldUntil(UI);
 			var oldContextMenu = UI.showContextMenu;
@@ -110,7 +123,7 @@ var UniqueValue = 0; //used for making non-conflicting id's
 					if (GameManager.isIdle() && UI.getCharUnderCursor())
 					{
 						menuitems.push(menuitem);
-					} 
+					}  	
 				} else {
 					if (GameManager.isIdle() && !UI.getCharUnderCursor())
 					{
@@ -121,15 +134,14 @@ var UniqueValue = 0; //used for making non-conflicting id's
 			}
 			UI.showContextMenu = newContextMenu;
 		};
-		GDT.removeCustomMenuItems = function() {
-			CollectedMenuItems=[];
-		}
+	//Graphic stuff
+		GDT.swapImageOrTexture = function(){} //TODO: make this thing work
 	//Lab researches
 		GDT.addLabResearch = function (research)
 		{
 			_yieldUntil(Research);
 			Research[research.id]=research;
 			Research.bigProjects.push(Research[research.id]);
-			//TODO: manage to make them actually appear c:
+			//TODO: manage to make them actually appear correctly
 		}
 })();

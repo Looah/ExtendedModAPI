@@ -5,4 +5,6 @@ object Achievement is equal to an array with {string id = "noname_#", string tit
 
 void GDT.addAchievement(Achievement achievement) - Adds achievement to achievements
 Achievement[] GDT.getAchievements() - returns all achievements
+void GDT.resetAchievements() - appearantly resets achievement progress
+-- old --
 void GDT.resetAchievements() - please don't use, not sure what it exactly does yet ._.'

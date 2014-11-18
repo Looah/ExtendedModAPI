@@ -1,0 +1,3 @@
+the current ume2emapi is very, very broken, so I decided to not put it on github yet.
+
+However, for whoever may be interested in how to parse a .ume file, it's just plain XML.
