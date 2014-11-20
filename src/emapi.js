@@ -1,5 +1,5 @@
 /*
-	Source of Extended Mod API
+    Source of Extended Mod API
 	Written by Looah
 	By using this file you accept the Greenheart Games Modding Agreement.
 	Licensed under the ISC license.
@@ -28,13 +28,11 @@ TODO list
 // If EMAPI is already running, halt code
 if (typeof EMAPI_RUNNING != "undefined")
 {
-	console.log("EMAPI already running :/");
 	while (true)
 	{
 		//ugly halt
 	}
 }
-console.log("Preparing EMAPI");
 var EMAPI_RUNNING = true; //tell EMAPI is running
 
 //if existant, return it, else return false
@@ -56,17 +54,45 @@ function _yieldUntil(x)
 
 (function(){
 var UniqueValue = 0; //used for making non-conflicting id's
-	//Achievements
-		GDT.addAchievement = function (achievement) {
-			_yieldUntil(Achievements);
-			Achievements[achievement.id || "noname_" + UniqueValue++]={
-			id: _doesExist(achievement.id) || "noname_" + (UniqueValue-1),
+var EMAPI = {}; //local-scoped functions to make code safer
+
+	//Defaulting
+	EMAPI.safeAchievement = function(achievement)
+	{
+		var endAch = {
+			id: _doesExist(achievement.id) || "emapidef_" + (UniqueValue++),
 			title: achievement.title || typeof achievement.title,
 			description: achievement.description || typeof achievement.description,
 			isAchieved: _doesExist(achievement.isAchieved) || (function(){return false;}),
 			tint: _doesExist(achievement.tint) || "#F4B300",
 			value: _doesExist(achievement.value) || 150
 			};
+		return endAch;
+	}
+	
+	EMAPI.safeSound = function(ssound)
+	{
+		var endMus = {
+				id: _doesExist(ssound.id) || "emapidef",
+				path: _doesExist(ssound.path) || "",
+				type: "sound"
+				};
+		return endMus;
+	}
+	
+	EMAPI.safeMItem = function(menuitem)
+	{
+		var endItem = {
+			label: _doesExist(menuitem.label) || "emapidef",
+			onclick: _doesExist(menuitem.onclick) || (function(){return false;})
+				};
+			return endItem;
+	}
+	
+	//Achievements
+		GDT.addAchievement = function (achievement) {
+			_yieldUntil(Achievements);
+			Achievements[achievement.id || "emapidef_" + UniqueValue]=EMAPI.safeAchievement(achievement);
 		}
 		GDT.getAchievements = function() {
 			_yieldUntil(Achievements);
@@ -106,28 +132,29 @@ var UniqueValue = 0; //used for making non-conflicting id's
 		}
 		GDT.addMusic = function (music) {
 			_yieldUntil(Sound)
-			music.type = "sound";
+			var safeM = EMAPI.safeSound(music);
 			createjs.Sound.registerPlugins([createjs.HTMLAudioPlugin]);
 			var musicloader = new createjs.LoadQueue;
 			musicloader.installPlugin(createjs.Sound);
-			musicloader.loadManifest([music]);
-			Sound._backgroundMusic.push(music.id);
+			musicloader.loadManifest([safeM]);
+			Sound._backgroundMusic.push(safeM.id);
 		}
 	//UI
 		GDT.addMenuItem = function (menuitem, overCharacter) {
 			_yieldUntil(UI);
+			var tItem = EMAPI.safeMItem(menuitem);
 			var oldContextMenu = UI.showContextMenu;
 			var newContextMenu = function(menuitems, mousepos) {
 				if (overCharacter)
 				{
 					if (GameManager.isIdle() && UI.getCharUnderCursor())
 					{
-						menuitems.push(menuitem);
+						menuitems.push(tItem);
 					}  	
 				} else {
 					if (GameManager.isIdle() && !UI.getCharUnderCursor())
 					{
-						menuitems.push(menuitem);
+						menuitems.push(tItem);
 					} 
 				}
 				oldContextMenu(menuitems, mousepos);
